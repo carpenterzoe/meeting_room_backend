@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { RedisService } from 'src/redis/redis.service';
 import { EmailService } from 'src/email/email.service';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -37,5 +38,19 @@ export class UserController {
   async initData() {
     await this.userService.initData();
     return 'done';
+  }
+
+  @Post('login')
+  async userLogin(@Body() loginUser: LoginUserDto) {
+    // isAdmin  false 用户端登录
+    const user = await this.userService.login(loginUser, false);
+    return user;
+  }
+
+  @Post('admin/login')
+  async adminLogin(@Body() loginUser: LoginUserDto) {
+    // isAdmin  true 管理端登录
+    const user = await this.userService.login(loginUser, true);
+    return user;
   }
 }

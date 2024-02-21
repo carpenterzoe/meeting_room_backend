@@ -13,6 +13,7 @@ import { RedisService } from 'src/redis/redis.service';
 import { md5 } from 'src/utils';
 import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -99,5 +100,25 @@ export class UserService {
     await this.permissionRepository.save([permission1, permission2]);
     await this.roleRepository.save([role1, role2]);
     await this.userRepository.save([user1, user2]);
+  }
+
+  async login(loginUserDto: LoginUserDto, isAdmin: boolean) {
+    const user = await this.userRepository.findOne({
+      where: {
+        username: loginUserDto.username,
+        isAdmin, // 账号密码是对的，但是接口不对，也就是 isAdmin 值不对，也查不到用户
+      },
+      relations: ['roles', 'roles.permissions'],
+    });
+
+    if (!user) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
+    if (user.password !== md5(loginUserDto.password)) {
+      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
+    }
+
+    return user;
   }
 }
