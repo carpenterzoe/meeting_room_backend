@@ -43,14 +43,14 @@ export class UserController {
   @Post('login')
   async userLogin(@Body() loginUser: LoginUserDto) {
     // isAdmin  false 用户端登录
-    const user = await this.userService.login(loginUser, false);
-    return user;
+    const vo = await this.userService.login(loginUser, false);
+    return vo;
   }
 
   @Post('admin/login')
   async adminLogin(@Body() loginUser: LoginUserDto) {
     // isAdmin  true 管理端登录
-    const user = await this.userService.login(loginUser, true);
-    return user;
+    const vo = await this.userService.login(loginUser, true);
+    return vo;
   }
 }
