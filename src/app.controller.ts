@@ -15,8 +15,7 @@ export class AppController {
   @RequireLogin()
   @RequirePermission('ddd')
   aaaa(@UserInfo('username') username: string, @UserInfo() useInfo) {
-    console.log('useInfo: ', useInfo);
-    console.log('username: ', username);
+    console.log('自定义装饰器获取参数: ', { username, useInfo });
     return 'aaa';
   }
 
