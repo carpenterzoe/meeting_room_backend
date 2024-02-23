@@ -15,6 +15,7 @@ import { Role } from './entities/role.entity';
 import { Permission } from './entities/permission.entity';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LoginUserVo } from './vo/login-user.vo';
+import { UserDetailVo } from './vo/user-info.vo';
 
 @Injectable()
 export class UserService {
@@ -167,5 +168,23 @@ export class UserService {
         return arr;
       }, []),
     };
+  }
+
+  async findUserDetailById(userId: number) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    const vo = new UserDetailVo();
+    vo.id = user.id;
+    vo.email = user.email;
+    vo.username = user.username;
+    vo.headPic = user.headPic;
+    vo.phoneNumber = user.phoneNumber;
+    vo.nickName = user.nickName;
+    vo.createTime = user.createTime;
+    vo.isFrozen = user.isFrozen;
+    return vo;
   }
 }
