@@ -221,4 +221,10 @@ export class UserController {
   ) {
     return await this.userService.update(userId, updateUserDto);
   }
+
+  @Get('freeze')
+  async freeze(@Query('id') userId: number) {
+    await this.userService.freezeUserById(userId);
+    return 'success';
+  }
 }
