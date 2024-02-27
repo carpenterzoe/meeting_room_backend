@@ -17,6 +17,7 @@ import { ConfigService } from '@nestjs/config';
 import { RequireLogin, UserInfo } from 'src/custom.decorator';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { generateParseIntPipe } from 'src/utils';
 
 @Controller('user')
 export class UserController {
@@ -226,5 +227,13 @@ export class UserController {
   async freeze(@Query('id') userId: number) {
     await this.userService.freezeUserById(userId);
     return 'success';
+  }
+
+  @Get('list')
+  async list(
+    @Query('pageNo', generateParseIntPipe('pageNo')) pageNo: number,
+    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
+  ) {
+    return await this.userService.findUsersByPage(pageNo, pageSize);
   }
 }
