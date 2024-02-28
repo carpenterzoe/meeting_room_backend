@@ -6,6 +6,7 @@ import {
   Get,
   Query,
   UnauthorizedException,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -231,9 +232,24 @@ export class UserController {
 
   @Get('list')
   async list(
-    @Query('pageNo', generateParseIntPipe('pageNo')) pageNo: number,
-    @Query('pageSize', generateParseIntPipe('pageSize')) pageSize: number,
+    @Query('pageNo', new DefaultValuePipe(1), generateParseIntPipe('pageNo'))
+    pageNo: number,
+    @Query(
+      'pageSize',
+      new DefaultValuePipe(2),
+      generateParseIntPipe('pageSize'),
+    )
+    pageSize: number,
+    @Query('username') username: string,
+    @Query('nickName') nickName: string,
+    @Query('email') email: string,
   ) {
-    return await this.userService.findUsersByPage(pageNo, pageSize);
+    return await this.userService.findUsers(
+      username,
+      nickName,
+      email,
+      pageNo,
+      pageSize,
+    );
   }
 }
