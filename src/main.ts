@@ -30,6 +30,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);
 
+  app.enableCors();
+
   await app.listen(configService.get('nest_server_port'));
 }
 bootstrap();
