@@ -250,10 +250,14 @@ export class UserService {
 
     try {
       await this.userRepository.save(foundUser);
-      return '用户信息修改成功';
+      return {
+        msg: '用户信息修改成功',
+      };
     } catch (e) {
       this.logger.error(e, UserService);
-      return '用户信息修改成功';
+      return {
+        msg: '用户信息修改失败，原因：' + e,
+      };
     }
   }
 
