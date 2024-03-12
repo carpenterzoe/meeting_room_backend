@@ -26,6 +26,7 @@ import { generateParseIntPipe } from 'src/utils';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as path from 'path';
+import { storage } from 'src/my-file-storage';
 
 @ApiTags('用户管理模块')
 @Controller('user')
@@ -277,6 +278,7 @@ export class UserController {
   @UseInterceptors(
     FileInterceptor('file', {
       dest: 'uploads',
+      storage: storage,
       limits: {
         fileSize: 1024 * 1024 * 2, // max 2M
       },
