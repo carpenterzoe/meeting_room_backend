@@ -284,7 +284,7 @@ export class UserController {
       },
       fileFilter(req, file, callback) {
         const extname = path.extname(file.originalname);
-        if (['.png', '.jpg'].includes(extname)) {
+        if (['.png', '.jpg', '.jpeg'].includes(extname)) {
           callback(null, true);
         } else {
           callback(new BadRequestException('只能上传图片(jpg, png)'), false);
@@ -294,6 +294,12 @@ export class UserController {
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log('file', file);
-    return file.path;
+    const baseUrl =
+      'http://' +
+      this.configService.get('nest_server_host') +
+      ':' +
+      this.configService.get('nest_server_port');
+    const filePath = file.path.split(path.sep).join('/');
+    return baseUrl + '/' + filePath;
   }
 }
